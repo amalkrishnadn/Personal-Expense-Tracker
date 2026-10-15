@@ -1,0 +1,12 @@
+/* App-level layout overrides — design tokens handled in index.css */
+
+/* Clear old purple gradient */
+.app-shell {
+  min-height: 100vh;
+}
+
+/* Ensure main content fills height */
+.main-content {
+  flex: 1;
+  overflow: hidden;
+}
