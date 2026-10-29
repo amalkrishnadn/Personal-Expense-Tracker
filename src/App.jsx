@@ -180,19 +180,6 @@ const App = () => {
           <Sidebar />
 
           <main className="flex-1 min-w-0 pb-20 md:pb-0">
-            {error && (
-              <div
-                className="mx-4 mt-4 rounded-xl p-3 text-sm"
-                style={{
-                  color: '#D56A43',
-                  background: '#FFFCF5',
-                  border: '1px solid #DEDCCF',
-                }}
-              >
-                {error}
-              </div>
-            )}
-
             <Routes>
               <Route
                 path="/"
