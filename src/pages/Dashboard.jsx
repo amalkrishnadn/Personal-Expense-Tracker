@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { motion } from 'motion/react'
 import { useNavigate } from 'react-router-dom'
@@ -16,34 +17,68 @@ const sectionVariants = {
   }),
 }
 
-const Dashboard = ({ onAddTransaction }) => {
+const Dashboard = ({ onAddTransaction,
+  transactions = [],
+  budgets = [],
+  onSaveBudget,}) => {
   const navigate = useNavigate()
 
   return (
     <div className="flex flex-col gap-5 p-4 sm:p-6 pb-8">
       {/* Hero */}
-      <motion.div custom={0} variants={sectionVariants} initial="hidden" animate="visible">
-        <BalanceHero />
+      <motion.div
+        custom={0}
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <BalanceHero transactions={transactions} />
       </motion.div>
 
       {/* Summary cards */}
-      <motion.div custom={1} variants={sectionVariants} initial="hidden" animate="visible">
-        <SummaryCards />
+      <motion.div
+        custom={1}
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <SummaryCards transactions={transactions} />
       </motion.div>
 
-      {/* Charts + budget (side-by-side on xl) */}
+      {/* Charts + budget */}
       <div className="grid xl:grid-cols-[1fr_320px] gap-5">
-        <motion.div custom={2} variants={sectionVariants} initial="hidden" animate="visible">
-          <SpendingChart />
+        <motion.div
+          custom={2}
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <SpendingChart transactions={transactions} />
         </motion.div>
-        <motion.div custom={3} variants={sectionVariants} initial="hidden" animate="visible">
-          <BudgetOverview />
+
+        <motion.div
+          custom={3}
+          variants={sectionVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <BudgetOverview
+  transactions={transactions}
+  budgets={budgets}
+  onSaveBudget={onSaveBudget}
+/>
         </motion.div>
       </div>
 
       {/* Recent transactions */}
-      <motion.div custom={4} variants={sectionVariants} initial="hidden" animate="visible">
+      <motion.div
+        custom={4}
+        variants={sectionVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <RecentTransactions
+          transactions={transactions}
           onViewAll={() => navigate('/transactions')}
           limit={6}
         />

@@ -16,18 +16,26 @@ const defaultForm = {
   description: '',
 }
 
-const TransactionModal = ({ isOpen, onClose }) => {
+const TransactionModal = ({ isOpen, onClose, onSubmit, transaction }) => {
   const [form, setForm] = useState(defaultForm)
 
   useEffect(() => {
-    if (isOpen) {
-      setForm({ ...defaultForm, date: new Date().toISOString().split('T')[0] })
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => { document.body.style.overflow = '' }
-  }, [isOpen])
+  if (isOpen) {
+    setForm(
+      transaction
+        ? { ...defaultForm, ...transaction, amount: String(transaction.amount) }
+        : { ...defaultForm }
+    );
+
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+
+  return () => {
+    document.body.style.overflow = '';
+  };
+}, [isOpen, transaction]);
 
   // Escape key
   useEffect(() => {
@@ -48,6 +56,23 @@ const TransactionModal = ({ isOpen, onClose }) => {
       return next
     })
   }
+
+  const handleSubmit = async () => {
+  if (!form.title.trim() || !form.amount || Number(form.amount) <= 0) {
+    alert("Please enter a title and a valid amount");
+    return;
+  }
+
+  try {
+    await onSubmit({
+      ...form,
+      title: form.title.trim(),
+      amount: Number(form.amount),
+    });
+  } catch (error) {
+    console.error("Failed to save transaction:", error);
+  }
+};
 
   const inputStyle = {
     background: '#F5F1E8',
@@ -263,7 +288,7 @@ const TransactionModal = ({ isOpen, onClose }) => {
                     type="button"
                     whileHover={{ scale: 1.02, y: -1 }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={onClose}
+                    onClick={handleSubmit}
                     className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all"
                     style={{
                       background: '#173C32',
